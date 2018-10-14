@@ -1,9 +1,9 @@
 class Item < Sprite
-  def initialize (image)
+  def initialize (image, level)
     x = rand(Window.width - image.width)
     y = 0
     super(x, y, image)
-    @speed_y = rand(9) + 4
+    @speed_y = rand(level+1) + 3
   end
   
   def update
@@ -13,8 +13,8 @@ class Item < Sprite
 end
 
 class Apple < Item
-  def initialize
-    super(Image[:apple])
+  def initialize (level)
+    super(Image[:apple], level)
     self.collision = [image.width / 2, image.height / 2, 56]
   end
   
@@ -26,8 +26,8 @@ class Apple < Item
 end
 
 class Bomb < Item
-  def initialize
-    super(Image[:bomb])
+  def initialize (level)
+    super(Image[:bomb], level)
     self.collision = [image.width / 2, image.height / 2, 32]
   end
   
@@ -55,9 +55,9 @@ class Items
     
     (N - @items.size).times do
       if rand(1..100) < 40
-        @items.push(Apple.new)
+        @items.push(Apple.new(player.level))
       else
-        @items.push(Bomb.new)
+        @items.push(Bomb.new(player.level))
       end
     end
   end
