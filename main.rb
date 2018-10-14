@@ -6,12 +6,17 @@ Image.register(:player, 'images/player.png')
 Image.register(:apple, 'images/apple.png')
 Image.register(:bomb, 'images/bomb.png')
 
+GAME_INFO = {
+  score: 0
+}
+
 class Player < Sprite
   def initialize
     x = Window.width / 2
     y = GROUND_Y - Image[:player].height
     image = Image[:player]
     super(x, y, image)
+    self.collision = [image.width / 2, image.height / 2, 16]
   end
   
   def update
@@ -40,12 +45,24 @@ end
 class Apple < Item
   def initialize
     super(Image[:apple])
+    self.collision = [image.width / 2, image.height / 2, 56]
+  end
+  
+  def hit
+    self.vanish
+    GAME_INFO[:score] += 10
   end
 end
 
 class Bomb < Item
   def initialize
     super(Image[:bomb])
+    self.collision = [image.width / 2, image.height / 2, 42]
+  end
+  
+  def hit
+    self.vanish
+    GAME_INFO[:score] = 0
   end
 end
 
@@ -56,8 +73,12 @@ class Items
     @items = []
   end
   
-  def update
-    Sprite.update(@items)
+  def update (player)
+    @items.each do |item|
+      item.update(player)
+    end
+    
+    Sprite.check(player, @items)
     Sprite.clean(@items)
     
     (N - @items.size).times do
@@ -80,11 +101,11 @@ Window.load_resources do
   
   Window.loop do
     player.update
-    items.update
+    items.update(player)
     
     Window.draw_box_fill(0, 0,Window.width, GROUND_Y, [128, 255, 255])
     Window.draw_box_fill(0, GROUND_Y, Window.width, Window.height, [0, 128, 0])
-    
+    Window.draw_font(0, 0, "SCORE: #{GAME_INFO[:score]}", Font.default)
     player.draw
     items.draw
   end
