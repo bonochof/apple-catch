@@ -4,6 +4,7 @@ include DXOpal
 GROUND_Y = 400
 Image.register(:player, 'images/player.png')
 Image.register(:apple, 'images/apple.png')
+Image.register(:bomb, 'images/bomb.png')
 
 class Player < Sprite
   def initialize
@@ -23,8 +24,7 @@ class Player < Sprite
 end
 
 class Item < Sprite
-  def initialize
-    image = Image[:apple]
+  def initialize (image)
     x = rand(Window.width - image.width)
     y = 0
     super(x, y, image)
@@ -34,6 +34,18 @@ class Item < Sprite
   def update
     self.y += @speed_y
     self.vanish if self.y > Window.height
+  end
+end
+
+class Apple < Item
+  def initialize
+    super(Image[:apple])
+  end
+end
+
+class Bomb < Item
+  def initialize
+    super(Image[:bomb])
   end
 end
 
@@ -49,7 +61,11 @@ class Items
     Sprite.clean(@items)
     
     (N - @items.size).times do
-      @items.push(Item.new)
+      if rand(1..100) < 40
+        @items.push(Apple.new)
+      else
+        @items.push(Bomb.new)
+      end
     end
   end
   
