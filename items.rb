@@ -28,7 +28,7 @@ end
 class Bomb < Item
   def initialize
     super(Image[:bomb])
-    self.collision = [image.width / 2, image.height / 2, 42]
+    self.collision = [image.width / 2, image.height / 2, 32]
   end
   
   def hit
