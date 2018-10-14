@@ -6,6 +6,9 @@ Image.register(:player, 'images/player.png')
 Image.register(:apple, 'images/apple.png')
 Image.register(:bomb, 'images/bomb.png')
 
+Sound.register(:get, 'sounds/get.wav')
+Sound.register(:explosion, 'sounds/explosion.wav')
+
 GAME_INFO = {
   score: 0
 }
@@ -49,6 +52,7 @@ class Apple < Item
   end
   
   def hit
+    Sound[:get].play
     self.vanish
     GAME_INFO[:score] += 10
   end
@@ -61,6 +65,7 @@ class Bomb < Item
   end
   
   def hit
+    Sound[:explosion].play
     self.vanish
     GAME_INFO[:score] = 0
   end
