@@ -3,6 +3,7 @@ include DXOpal
 
 GROUND_Y = 400
 Image.register(:player, 'images/player.png')
+Image.register(:apple, 'images/apple.png')
 
 class Player < Sprite
   def initialize
@@ -21,15 +22,54 @@ class Player < Sprite
   end
 end
 
+class Item < Sprite
+  def initialize
+    image = Image[:apple]
+    x = rand(Window.width - image.width)
+    y = 0
+    super(x, y, image)
+    @speed_y = rand(9) + 4
+  end
+  
+  def update
+    self.y += @speed_y
+    self.vanish if self.y > Window.height
+  end
+end
+
+class Items
+  N = 5
+  
+  def initialize
+    @items = []
+  end
+  
+  def update
+    Sprite.update(@items)
+    Sprite.clean(@items)
+    
+    (N - @items.size).times do
+      @items.push(Item.new)
+    end
+  end
+  
+  def draw
+    Sprite.draw(@items)
+  end
+end
+
 Window.load_resources do
   player = Player.new
+  items = Items.new
   
   Window.loop do
     player.update
+    items.update
     
     Window.draw_box_fill(0, 0,Window.width, GROUND_Y, [128, 255, 255])
     Window.draw_box_fill(0, GROUND_Y, Window.width, Window.height, [0, 128, 0])
     
     player.draw
+    items.draw
   end
 end
