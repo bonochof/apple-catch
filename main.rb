@@ -8,9 +8,9 @@ Window.load_resources do
   x = Window.width / 2
   
   Window.loop do
-    if Input.key_down?(K_LEFT)
+    if Input.key_down?(K_LEFT) and x > 0
       x -= 8
-    elsif Input.key_down?(K_RIGHT)
+    elsif Input.key_down?(K_RIGHT) and x < (Window.width - Image[:player].width)
       x += 8
     end
     
