@@ -38,6 +38,19 @@ class Bomb < Item
   end
 end
 
+class Special < Item
+  def initialize
+    super(Image[:special], 0)
+    self.collision = [image.width / 2, image.height / 2, 32]
+  end
+  
+  def hit
+    Sound[:get].play
+    self.vanish
+    GAME_INFO[:bonus] = rand(10..100)
+  end
+end
+
 class Items
   N = 5
   
@@ -54,8 +67,12 @@ class Items
     Sprite.clean(@items)
     
     (N - @items.size).times do
-      if rand(1..100) < 40
+      r = rand(100)
+      if r == 0
+        @items.push(Special.new)
+      elsif rand(1..100) < 40 || GAME_INFO[:bonus] > 0
         @items.push(Apple.new(player.level))
+        GAME_INFO[:bonus] -= 1 if GAME_INFO[:bonus] > 0
       else
         @items.push(Bomb.new(player.level))
       end
