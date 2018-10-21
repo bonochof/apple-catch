@@ -7,6 +7,7 @@ class Game
     @player = Player.new
     @items = Items.new
     GAME_INFO[:score] = 0
+    GAME_INFO[:bonus] = 0
   end
 
   def run
