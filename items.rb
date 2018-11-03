@@ -68,9 +68,9 @@ class Items
     
     (N - @items.size).times do
       r = rand(100)
-      if r == 0
+      if r == 0 and GAME_INFO[:bonus] == 0
         @items.push(Special.new)
-      elsif rand(1..100) < 40 || GAME_INFO[:bonus] > 0
+      elsif rand(1..100) < 40 or GAME_INFO[:bonus] > 0
         @items.push(Apple.new(player.level))
         GAME_INFO[:bonus] -= 1 if GAME_INFO[:bonus] > 0
       else
