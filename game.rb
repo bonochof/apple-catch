@@ -20,7 +20,7 @@ class Game
       case GAME_INFO[:scene]
       when :title
         Window.draw_font(220, 120, "PRESS SPACE", @font, :color=>[200, 0, 0])
-        GAME_INFO[:scene] = :playing if Input.key_push?(K_SPACE)
+        GAME_INFO[:scene] = :playing if Input.key_push?(K_SPACE) or Input.touch_push?
       when :playing
         @player.update
         @items.update(@player)
@@ -30,7 +30,7 @@ class Game
         @player.draw
         @items.draw
         Window.draw_font(220, 120, "PRESS SPACE", @font, :color=>[200, 0, 0])
-        if Input.key_push?(K_SPACE)
+        if Input.key_push?(K_SPACE) or Input.touch_push?
           reset
           GAME_INFO[:scene] = :playing
         end

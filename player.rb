@@ -12,6 +12,13 @@ class Player < Sprite
   end
   
   def update
+    Input.touches.each do |t|
+      if t.x < Window.width / 2
+        self.x -= 6
+      else
+        self.x += 6
+      end
+    end
     if Input.key_down?(K_LEFT) and x > 0
       self.x -= 8
     elsif Input.key_down?(K_RIGHT) and x < (Window.width - Image[:player].width)
